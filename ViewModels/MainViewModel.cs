@@ -2,25 +2,25 @@
 using Binance.Infrastructure.Commands;
 using Binance.Services;
 using Binance.Views.Controls;
-using System.Collections;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using System.Web.Script.Serialization;
 using System.Windows;
 using Binance.Models;
 using System.Windows.Input;
-using WebSocketSharp;
 using Binance.Views.Pages;
 using MaterialDesignThemes.Wpf;
 using System.Collections.Generic;
+
+using System.Linq;
+using System;
+using Binance.ViewModels.Controls;
 
 namespace Binance.ViewModels
 {
     internal class MainViewModel : ViewModel
     {
         #region Свойства
-        ObservableCollection<CoinView> contentRecession = new ObservableCollection<CoinView>();
-        ObservableCollection<CoinView> contentRise = new ObservableCollection<CoinView>();
+        private readonly ObservableCollection<CoinView> contentRecession = new ObservableCollection<CoinView>();
+        private readonly ObservableCollection<CoinView> contentRise = new ObservableCollection<CoinView>();
 
         #region Заголовок окна
         private string _title = "Binance analyzer";
@@ -94,16 +94,6 @@ namespace Binance.ViewModels
         }
         #endregion
 
-        #region Главное содержимое 
-        private ObservableCollection<CoinView> _content;
-        /// <summary>Главное содержимое</summary>
-        public ObservableCollection<CoinView> Content
-        {
-            get => _content;
-            set => SetProperty(ref _content, value);
-        }
-        #endregion
-
         #region Главное содержимое (падающее)
         private ObservableCollection<CoinView> _contentRecession;
         /// <summary>Главное содержимое</summary>
@@ -133,7 +123,7 @@ namespace Binance.ViewModels
             object result = await DialogHost.Show(new CoinsListView(), "PairsListDialog");
             if (result == null)
             {
-                UpdateDataList();
+                InitDataLists();
             }
         }
 
@@ -144,13 +134,13 @@ namespace Binance.ViewModels
         private bool CanCloseApplicationCommandExcecut(object p) => true;
         private void OnCloseApplicationCommandExecuted(object p)
         {
-             Application.Current.Shutdown();
+            Application.Current.Shutdown();
         }
         #endregion
 
         #endregion
 
-        private void UpdateDataList()
+        private void InitDataLists()
         {
             contentRecession.Clear();
             contentRise.Clear();
@@ -160,13 +150,59 @@ namespace Binance.ViewModels
                 contentRecession.Add(new CoinView(pair.Title, CoinView.TypeControlEnum.Recession));
                 contentRise.Add(new CoinView(pair.Title, CoinView.TypeControlEnum.Rise));
             }
+
             ContentRecession = contentRecession;
             ContentRise = contentRise;
         }
 
-        private void Sort()
-        {
 
+        private ObservableCollection<CoinView> CollectionsSort(ObservableCollection<CoinView> coinViews, bool sortABS = true)
+        {
+            Application.Current.Dispatcher.Invoke(delegate
+            {
+
+                // HACK : Пришлось писать сортировку. Сделать асинхроном лучше
+                CoinView[] sortedItemsList = coinViews.ToArray();
+                // Сортировка массива
+                CoinView temp;
+                for (int i = 0; i < sortedItemsList.Length - 1; i++)
+                {
+                    for (int j = i + 1; j < sortedItemsList.Length; j++)
+                    {
+                        double val1 = double.Parse(sortedItemsList[i].TB_Percent.Text.Replace("%", string.Empty).Replace('.', ','));
+                        double val2 = double.Parse(sortedItemsList[j].TB_Percent.Text.Replace("%", string.Empty).Replace('.', ','));
+                        if (sortABS)
+                        {
+                            if (val1 > val2) // operator
+                            {
+                                temp = sortedItemsList[i];
+                                sortedItemsList[i] = sortedItemsList[j];
+                                sortedItemsList[j] = temp;
+                            }
+                        }
+                        else
+                        {
+                            if (val1 < val2) // operator
+                            {
+                                temp = sortedItemsList[i];
+                                sortedItemsList[i] = sortedItemsList[j];
+                                sortedItemsList[j] = temp;
+                            }
+                        }
+                    }
+                }
+                // Установка индексов
+                for (int i = 0; i < sortedItemsList.Length; i++)
+                {
+                    int idx = coinViews.IndexOf(sortedItemsList[i]);
+                    if (idx != i)
+                    {
+                        coinViews.Move(idx, i);
+                    }
+                }
+
+            });
+            return coinViews;
         }
 
 
@@ -180,14 +216,20 @@ namespace Binance.ViewModels
 
             DataBase.Create();
             DataBase.AddMainCoins();
-            UpdateDataList();
+            InitDataLists();
 
             Socket.UpdateStatus += SocketSubscription;
-
+            Socket.UpdateCoinsCollection += Socket_UpdateCoinsCollection;
             #endregion
         }
 
-        private void SocketSubscription(object sender, System.EventArgs e)
+        private void Socket_UpdateCoinsCollection()
+        {
+            ContentRise = CollectionsSort(ContentRise, false);
+            ContentRecession = CollectionsSort(ContentRecession);
+        }
+
+        private void SocketSubscription(object sender, EventArgs e)
         {
             Status = Socket.Status;
         }

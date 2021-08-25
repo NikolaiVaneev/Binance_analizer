@@ -127,6 +127,7 @@
     <Compile Include="Infrastructure\Commands\RelayCommand.cs" />
     <Compile Include="Models\Coin.cs" />
     <Compile Include="Models\Pair.cs" />
+    <Compile Include="Services\ObservableCollectionEx.cs" />
     <Compile Include="ViewModels\Base\ViewModel.cs" />
     <Compile Include="ViewModels\Controls\CoinViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
@@ -173,7 +174,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Services\" />
     <Folder Include="Views\Dialogs\" />
   </ItemGroup>
   <ItemGroup>

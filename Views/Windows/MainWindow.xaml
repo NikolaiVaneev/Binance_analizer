@@ -8,7 +8,7 @@
         xmlns:cmd="clr-namespace:Binance.Infrastructure.Commands"
         mc:Ignorable="d"
         Title="{Binding Title}" Height="500" Width="700" WindowStartupLocation="CenterScreen"
-       
+        xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
@@ -22,6 +22,7 @@
     <Window.DataContext>
         <vm:MainViewModel/>
     </Window.DataContext>
+
 
     <!--Как прибиндить сочетание клавиш в окне-->
     <Window.InputBindings>

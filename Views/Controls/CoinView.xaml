@@ -29,7 +29,7 @@
         </Grid.ColumnDefinitions>
         <TextBlock Text="{Binding Path=Title}" Grid.Column="0" Margin="5 0"
                    VerticalAlignment="Center"/>
-        <TextBlock Margin="5 0" Text="{Binding Path=Percent, StringFormat={}{0:N3}%}" Grid.Column="1" 
+        <TextBlock x:Name="TB_Percent" Margin="5 0" Text="{Binding Path=Percent, StringFormat={}{0:N3}%}" Grid.Column="1" 
                    VerticalAlignment="Center" 
                    Foreground="{Binding Path=PercentColor}"/>
         <ProgressBar Grid.ColumnSpan="2" Opacity="0.15" Height="30"  Background="LightGray" Value="{Binding StackComplete}" Maximum="{Binding MaxStack}"/>
