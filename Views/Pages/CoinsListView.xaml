@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="Binance.Views.Pages.CoinsListView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Binance.Views.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450"
+
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"     
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+      xmlns:vm="clr-namespace:Binance.ViewModels.Pages"
+      Background="{DynamicResource MaterialDesignPaper}"
+      FontFamily="{DynamicResource MaterialDesignFont}" MaxHeight="400" Width="354">
+    <UserControl.DataContext>
+        <vm:CoinsListViewModel/>
+    </UserControl.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10 5">
+            <TextBox x:Name="TB_CoinTitle" Width="130" Text="{Binding PairTitle}"
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                     materialDesign:HintAssist.Hint="Наименование пары"/>
+            <Button Background="Green" Width="100" Command="{Binding AddPairCommand}" IsEnabled="{Binding ElementName=TB_CoinTitle, Path=Text.Length}" 
+                    Content="Добавить" Margin="10 0" materialDesign:HintAssist.Hint="Добавить пару"/>
+            <Button Grid.Row="0" Content="Закрыть"
+                            IsCancel="True" 
+                            Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">
+
+            </Button>
+        </StackPanel>
+
+        <ListBox x:Name="LB_PairList" Grid.Row="1" 
+                 HorizontalContentAlignment="Stretch"
+                 ItemsSource="{Binding PairList}"/>
+
+        <StatusBar Grid.Row="2">
+            <TextBlock Style="{StaticResource MaterialDesignBody2TextBlock}" Text="{Binding StringFormat=Количество пар - {0}, ElementName=LB_PairList, Path=Items.Count}"/>
+        </StatusBar>
+    </Grid>
+</UserControl>
