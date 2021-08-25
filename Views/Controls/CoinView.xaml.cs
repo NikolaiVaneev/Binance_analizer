@@ -5,10 +5,17 @@ namespace Binance.Views.Controls
 {
     public partial class CoinView : UserControl
     {
-        public CoinView(string title)
+        public enum TypeControlEnum
+        {
+            Recession,
+            NonChange,
+            Rise
+        }
+        public CoinView(string title, TypeControlEnum typeControl)
         {
             InitializeComponent();
             ((CoinViewModel)DataContext).Title = title.ToUpper();
+            ((CoinViewModel)DataContext).TypeControl = (CoinViewModel.TypeControlEnum)typeControl;
         }
     }
 }

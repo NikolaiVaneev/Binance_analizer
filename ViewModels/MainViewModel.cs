@@ -20,6 +20,8 @@ namespace Binance.ViewModels
     {
         #region Свойства
         ObservableCollection<CoinView> coins = new ObservableCollection<CoinView>();
+        ObservableCollection<CoinView> contentRecession = new ObservableCollection<CoinView>();
+        ObservableCollection<CoinView> contentRise = new ObservableCollection<CoinView>();
 
         #region Заголовок окна
         private string _title = "Binance analyzer";
@@ -83,6 +85,16 @@ namespace Binance.ViewModels
         }
         #endregion
 
+        #region Главное содержимое (растущее)
+        private ObservableCollection<CoinView> _contentRise;
+        /// <summary>Главное содержимое</summary>
+        public ObservableCollection<CoinView> ContentRise
+        {
+            get => _contentRise;
+            set => SetProperty(ref _contentRise, value);
+        }
+        #endregion
+
         #region Главное содержимое 
         private ObservableCollection<CoinView> _content;
         /// <summary>Главное содержимое</summary>
@@ -90,6 +102,16 @@ namespace Binance.ViewModels
         {
             get => _content;
             set => SetProperty(ref _content, value);
+        }
+        #endregion
+
+        #region Главное содержимое (падающее)
+        private ObservableCollection<CoinView> _contentRecession;
+        /// <summary>Главное содержимое</summary>
+        public ObservableCollection<CoinView> ContentRecession
+        {
+            get => _contentRecession;
+            set => SetProperty(ref _contentRecession, value);
         }
         #endregion
         #endregion
@@ -132,12 +154,17 @@ namespace Binance.ViewModels
         private void UpdateDataList()
         {
             coins.Clear();
+            contentRecession.Clear();
+            contentRise.Clear();
 
             foreach (Pair pair in DataBase.GetAllPair())
             {
-                coins.Add(new CoinView(pair.Title));
+                coins.Add(new CoinView(pair.Title, CoinView.TypeControlEnum.NonChange));
+                contentRecession.Add(new CoinView(pair.Title, CoinView.TypeControlEnum.Recession));
+                contentRise.Add(new CoinView(pair.Title, CoinView.TypeControlEnum.Rise));
             }
-
+            ContentRecession = contentRecession;
+            ContentRise = contentRise;
             Content = coins;
         }
 

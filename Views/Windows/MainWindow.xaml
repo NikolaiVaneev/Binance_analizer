@@ -77,8 +77,43 @@
                     Text="{Binding Status}"/>
                 </StatusBarItem>
             </StatusBar>
+
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <ScrollViewer Grid.Column="0">
+                    <ItemsControl ItemsSource="{Binding ContentRise}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ScrollViewer>
+                <ScrollViewer Grid.Column="1">
+                    <ItemsControl ItemsSource="{Binding Content}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ScrollViewer>
+                <ScrollViewer Grid.Column="2">
+                    <ItemsControl ItemsSource="{Binding ContentRecession}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
             
-            <ScrollViewer Grid.Column="1">
+            <!--<ScrollViewer Grid.Column="1">
                 <ItemsControl ItemsSource="{Binding Content}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -87,7 +122,7 @@
                     </ItemsControl.ItemsPanel>
 
                 </ItemsControl>
-            </ScrollViewer>
+            </ScrollViewer>-->
 
         </DockPanel>
     </materialDesign:DialogHost>

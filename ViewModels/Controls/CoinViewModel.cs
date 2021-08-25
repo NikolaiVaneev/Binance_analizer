@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 
 namespace Binance.ViewModels.Controls
@@ -19,6 +20,24 @@ namespace Binance.ViewModels.Controls
         {
             get => _title;
             set => SetProperty(ref _title, value);
+        }
+        #endregion
+
+
+        public enum TypeControlEnum
+        {
+            Recession,
+            NonChange,
+            Rise
+        }
+
+        #region Тип (Падающий, растущий, не изменяемый)
+        private TypeControlEnum _typeControl;
+        /// <summary>Тип (Падающий, растущий, не изменяемый)</summary>
+        public TypeControlEnum TypeControl
+        {
+            get => _typeControl;
+            set => SetProperty(ref _typeControl, value);
         }
         #endregion
 
@@ -39,6 +58,16 @@ namespace Binance.ViewModels.Controls
         {
             get => _percentColor;
             set => SetProperty(ref _percentColor, value);
+        }
+        #endregion
+
+        #region Видимость
+        private Visibility _visible;
+        /// <summary>Видимость</summary>
+        public Visibility Visible
+        {
+            get => _visible;
+            set => SetProperty(ref _visible, value);
         }
         #endregion
 
@@ -69,7 +98,6 @@ namespace Binance.ViewModels.Controls
 
         private void Socket_UpdateCoinsCollection()
         {
-            
             Coin pair = Socket.Coins.FirstOrDefault(c => c.Title == Title);
             if (pair != null)
             {
@@ -77,18 +105,23 @@ namespace Binance.ViewModels.Controls
                 MaxStack = AppVar.TolalPeriod;
 
                 Percent = pair.Percent;
+                
+
                 if (Percent > AppVar.AlertPercent)
                 {
                     PercentColor = Brushes.Green;
+                    Visible = TypeControl == TypeControlEnum.Rise ? Visibility.Visible : Visibility.Collapsed;
                 }
                 else if
                 (Percent < -AppVar.AlertPercent)
                 {
                     PercentColor = Brushes.Red;
+                    Visible = TypeControl == TypeControlEnum.Recession ? Visibility.Visible : Visibility.Collapsed;
                 }
                 else
                 {
                     PercentColor = Brushes.Gray;
+                    Visible = TypeControl == TypeControlEnum.NonChange ? Visibility.Visible : Visibility.Collapsed;
                 }
             }
 

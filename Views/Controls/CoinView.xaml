@@ -14,7 +14,7 @@
              TextOptions.TextRenderingMode="Auto"        
              Background="{DynamicResource MaterialDesignPaper}"
              FontFamily="{DynamicResource MaterialDesignFont}"
-             
+             Visibility="{Binding Visible}"
              xmlns:vm="clr-namespace:Binance.ViewModels.Controls">
 
     <UserControl.DataContext>
