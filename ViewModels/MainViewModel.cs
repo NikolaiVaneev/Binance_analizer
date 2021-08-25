@@ -19,7 +19,6 @@ namespace Binance.ViewModels
     internal class MainViewModel : ViewModel
     {
         #region Свойства
-        ObservableCollection<CoinView> coins = new ObservableCollection<CoinView>();
         ObservableCollection<CoinView> contentRecession = new ObservableCollection<CoinView>();
         ObservableCollection<CoinView> contentRise = new ObservableCollection<CoinView>();
 
@@ -153,19 +152,21 @@ namespace Binance.ViewModels
 
         private void UpdateDataList()
         {
-            coins.Clear();
             contentRecession.Clear();
             contentRise.Clear();
 
             foreach (Pair pair in DataBase.GetAllPair())
             {
-                coins.Add(new CoinView(pair.Title, CoinView.TypeControlEnum.NonChange));
                 contentRecession.Add(new CoinView(pair.Title, CoinView.TypeControlEnum.Recession));
                 contentRise.Add(new CoinView(pair.Title, CoinView.TypeControlEnum.Rise));
             }
             ContentRecession = contentRecession;
             ContentRise = contentRise;
-            Content = coins;
+        }
+
+        private void Sort()
+        {
+
         }
 
 

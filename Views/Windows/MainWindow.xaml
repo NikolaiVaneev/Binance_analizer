@@ -82,9 +82,16 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <ScrollViewer Grid.Column="0">
+                 </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Рост" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="Падение" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                <ScrollViewer Grid.Column="0" Grid.Row="1">
                     <ItemsControl ItemsSource="{Binding ContentRise}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -93,16 +100,8 @@
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
                 </ScrollViewer>
-                <ScrollViewer Grid.Column="1">
-                    <ItemsControl ItemsSource="{Binding Content}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                    </ItemsControl>
-                </ScrollViewer>
-                <ScrollViewer Grid.Column="2">
+
+                <ScrollViewer Grid.Column="1" Grid.Row="1">
                     <ItemsControl ItemsSource="{Binding ContentRecession}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>

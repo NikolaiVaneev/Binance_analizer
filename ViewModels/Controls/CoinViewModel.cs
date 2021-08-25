@@ -27,7 +27,6 @@ namespace Binance.ViewModels.Controls
         public enum TypeControlEnum
         {
             Recession,
-            NonChange,
             Rise
         }
 
@@ -110,19 +109,22 @@ namespace Binance.ViewModels.Controls
                 if (Percent > AppVar.AlertPercent)
                 {
                     PercentColor = Brushes.Green;
-                    Visible = TypeControl == TypeControlEnum.Rise ? Visibility.Visible : Visibility.Collapsed;
-                }
-                else if
-                (Percent < -AppVar.AlertPercent)
-                {
-                    PercentColor = Brushes.Red;
-                    Visible = TypeControl == TypeControlEnum.Recession ? Visibility.Visible : Visibility.Collapsed;
                 }
                 else
                 {
-                    PercentColor = Brushes.Gray;
-                    Visible = TypeControl == TypeControlEnum.NonChange ? Visibility.Visible : Visibility.Collapsed;
+                    PercentColor = Percent < -AppVar.AlertPercent ? Brushes.Red : Brushes.Gray;
                 }
+
+                if (Percent > 0)
+                {
+                    Visible = TypeControl == TypeControlEnum.Rise ? Visibility.Visible : Visibility.Collapsed;
+                }
+                else if
+                (Percent < 0)
+                {
+                    Visible = TypeControl == TypeControlEnum.Recession ? Visibility.Visible : Visibility.Collapsed;
+                }
+
             }
 
         }

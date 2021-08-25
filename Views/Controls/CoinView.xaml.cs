@@ -8,7 +8,6 @@ namespace Binance.Views.Controls
         public enum TypeControlEnum
         {
             Recession,
-            NonChange,
             Rise
         }
         public CoinView(string title, TypeControlEnum typeControl)
